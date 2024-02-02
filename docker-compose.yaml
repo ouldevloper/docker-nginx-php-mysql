@@ -1,0 +1,47 @@
+version: '3'
+services:
+  nginx2:
+    container_name: nginx2
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./vhost.conf:/etc/nginx/conf.d/default.conf
+      - ./app:/var/www/public_html
+    depends_on:
+      - php2
+      - mysql2
+  php2:
+    container_name: php2
+    build: ./app
+    image: php8.2
+    volumes:
+      - ./app:/var/www/public_html
+    networks:
+      - network2
+    depends_on:
+      - mysql2
+
+  mysql2:
+    container_name: mysql2
+    image: mysql
+    volumes:
+      - ./data:/var/lib/mysql
+    networks:
+      - network2
+    enverments:
+      - MYSQL_ROOT_PASSWORD=root 
+  phpmyadmin2:
+    container_name: phpmyadmin2
+    image: phpmyadmin
+    ports:
+      - 1500:80
+    enverments:
+      - PMA_HOST=mysql2
+    networks:
+      - network2
+    depends_on:
+      - mysql2
+networks:
+  network2
+    
