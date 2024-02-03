@@ -13,8 +13,7 @@ services:
       - mysql2
   php2:
     container_name: php2
-    build: ./app
-    image: php8.2
+    image: php
     volumes:
       - ./app:/var/www/public_html
     networks:
@@ -29,19 +28,21 @@ services:
       - ./data:/var/lib/mysql
     networks:
       - network2
-    enverments:
+    environment:
       - MYSQL_ROOT_PASSWORD=root 
   phpmyadmin2:
     container_name: phpmyadmin2
     image: phpmyadmin
     ports:
       - 1500:80
-    enverments:
+    environment:
       - PMA_HOST=mysql2
     networks:
       - network2
     depends_on:
       - mysql2
 networks:
-  network2
+  network2:
+    name: network2
+
     
